@@ -2,10 +2,6 @@ package com.baidu.paddle.lite.demo.ocr;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Path;
 import android.graphics.Point;
 import android.util.Log;
 
@@ -247,32 +243,7 @@ public class Predictor {
             outputResultSb.append(i + 1).append(": ").append(sb.toString()).append("\n");
         }
         outputResult = outputResultSb.toString();
-        outputImage = inputImage;
-        Canvas canvas = new Canvas(outputImage);
-        Paint paintFillAlpha = new Paint();
-        paintFillAlpha.setStyle(Paint.Style.FILL);
-        paintFillAlpha.setColor(Color.parseColor("#3B85F5"));
-        paintFillAlpha.setAlpha(50);
-
-        Paint paint = new Paint();
-        paint.setColor(Color.parseColor("#3B85F5"));
-        paint.setStrokeWidth(5);
-        paint.setStyle(Paint.Style.STROKE);
-
-        for (OcrResultModel result : results) {
-            Path path = new Path();
-            List<Point> points = result.getPoints();
-            if(points.size()==0){
-                continue;
-            }
-            path.moveTo(points.get(0).x, points.get(0).y);
-            for (int i = points.size() - 1; i >= 0; i--) {
-                Point p = points.get(i);
-                path.lineTo(p.x, p.y);
-            }
-            canvas.drawPath(path, paint);
-            canvas.drawPath(path, paintFillAlpha);
-        }
+        outputImage = RectDrawer.drawRect(inputImage, results);
     }
 
 }
